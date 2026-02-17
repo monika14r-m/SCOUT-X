@@ -1,5 +1,4 @@
 # SCOUT-X
-Secure Control &amp; Operational Unified Trust – eXtended
 Secure Control & Operational Unified Trust – eXtended
 SCOUT-X is a real-time anti-hijacking security framework designed specifically to protect unmanned aerial vehicles (UAVs) from unauthorized control takeover
 
