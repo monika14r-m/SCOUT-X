@@ -28,3 +28,4 @@ altitude += 1
 battery -= 0.1
 
 time.sleep(1)
+print("Telemetry:", data)
