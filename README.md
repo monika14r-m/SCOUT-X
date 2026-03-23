@@ -7,3 +7,11 @@ Modern drones rely on wireless communication between the ground control station 
 SCOUT-X introduces a control-layer security engine that intercepts and validates all incoming flight commands before execution. The system enforces authenticated command integrity, analyzes behavioral flight patterns in real time, and activates automatic mitigation mechanisms such as safe-hover or return-to-home when hijacking attempts are detected
 
 By shifting protection from network-level monitoring to runtime control enforcement, SCOUT-X enhances drone resilience against remote takeover attacks
+
+## Drone Simulation
+
+The drone simulation module is used to replicate real drone behavior without physical hardware.
+
+It generates live telemetry data such as GPS coordinates, altitude, and battery levels, and streams it to the ground control system. This allows testing of communication and system behavior in a controlled environment.
+
+The simulation helps validate data flow and system responses before deploying on an actual drone.
