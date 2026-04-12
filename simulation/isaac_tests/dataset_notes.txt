@@ -1,0 +1,2 @@
+Generated a few test frames in Isaac Sim to check camera output
+Will add full synthetic dataset samples after tuning lighting and environment
