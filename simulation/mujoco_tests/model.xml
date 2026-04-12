@@ -1,0 +1,7 @@
+<mujoco model="scoutx_test">
+    <worldbody>
+        <body name="drone" pos="0 0 1">
+            <joint name="root" type="free"/>
+        </body>
+    </worldbody>
+</mujoco>
