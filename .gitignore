@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+test.txt
+.env
+node_modules/
