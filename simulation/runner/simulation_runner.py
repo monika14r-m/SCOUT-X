@@ -18,6 +18,10 @@ while True:
 
     # Step 2: fetch telemetry data
     data = engine.update()
+    # FORCE ATTACK after sequence > 5
+    if data["seq"] > 5:
+      data["altitude"] += 500
+      data["attack"] = "ALTITUDE_SPOOF"
 
     # Step 3: security validation layer
     data = security.validate_telemetry(data)

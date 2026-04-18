@@ -23,15 +23,22 @@ class SecurityMiddleware:
         """
         Basic rule-based anomaly detection (expand later)
         """
+
+        # --- GPS sanity ---
         if "gps" in data:
             gps = data["gps"]
-
-            # Simple sanity check: values out of range
             if abs(gps.get("lat", 0)) > 90 or abs(gps.get("lon", 0)) > 180:
                 return True
 
+        # --- NOISE check ---
         if data.get("noise_level", 0) > 0.8:
             return True
+
+        # --- ALTITUDE anomaly ---
+        if "altitude" in data:
+            if data["altitude"] > 100:
+                print("[SECURITY] ALERT: Altitude anomaly detected")
+                return True
 
         return False
 
