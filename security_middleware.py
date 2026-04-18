@@ -2,6 +2,7 @@ class SecurityMiddleware:
     def __init__(self):
         self.trust_score = 1.0
         self.anomaly_threshold = 0.6
+        self.prev_altitude = None
 
     def validate_telemetry(self, data):
         """
@@ -20,27 +21,36 @@ class SecurityMiddleware:
         return data
 
     def detect_anomaly(self, data):
-        """
-        Basic rule-based anomaly detection (expand later)
-        """
+        anomaly_detected = False
 
         # --- GPS sanity ---
         if "gps" in data:
             gps = data["gps"]
             if abs(gps.get("lat", 0)) > 90 or abs(gps.get("lon", 0)) > 180:
-                return True
+                anomaly_detected = True
 
         # --- NOISE check ---
         if data.get("noise_level", 0) > 0.8:
-            return True
+            anomaly_detected = True
 
-        # --- ALTITUDE anomaly ---
+        # --- ALTITUDE absolute ---
         if "altitude" in data:
             if data["altitude"] > 100:
                 print("[SECURITY] ALERT: Altitude anomaly detected")
-                return True
+                anomaly_detected = True
 
-        return False
+        # --- ALTITUDE delta ---
+        if "altitude" in data:
+            if self.prev_altitude is not None:
+                delta = abs(data["altitude"] - self.prev_altitude)
+
+                if delta > 50:
+                    print("[SECURITY] ALERT: Sudden altitude change detected")
+                    anomaly_detected = True
+
+            self.prev_altitude = data["altitude"]
+
+        return anomaly_detected
 
     def update_trust(self, flag):
         """
