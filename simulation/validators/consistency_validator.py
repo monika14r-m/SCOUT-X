@@ -3,6 +3,35 @@ import math
 def validate_consistency(prev_state, current_state):
     flags = []
     score = 1.0
+    
+    # GPS vs SPEED CONSISTENCY CHECK
+    try:
+        import math
+
+        lat1 = prev_state["gps"]["lat"]
+        lon1 = prev_state["gps"]["lon"]
+        lat2 = current_state["gps"]["lat"]
+        lon2 = current_state["gps"]["lon"]
+
+        dt = current_state["timestamp"] - prev_state["timestamp"]
+        if dt <= 0:
+            dt = 0.001
+
+        # rough distance (not geo-accurate, but enough for anomaly detection)
+        distance = math.sqrt((lat2 - lat1)**2 + (lon2 - lon1)**2)
+
+        reported_speed = current_state.get("speed", 0)
+
+        implied_speed = distance / dt
+
+        # compare mismatch
+        if abs(implied_speed - reported_speed) > 0.0005:
+            flags.append("SPEED_GPS_MISMATCH")
+            score -= 0.4
+
+    except:
+        flags.append("SPEED_CHECK_ERROR")
+        score -= 0.2
 
     # Extract values safely
     try:
@@ -42,6 +71,8 @@ def validate_consistency(prev_state, current_state):
         score -= 0.5
 
     score = max(0.0, min(1.0, score))
+
+    
 
     return {
         "score": score,
