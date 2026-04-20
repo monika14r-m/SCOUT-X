@@ -1,5 +1,5 @@
 # SCOUT-X
-Secure Control & Operational Unified Trust – eXtended
+Secure Commands and Operations for UAV Telemetry - eXtended
 SCOUT-X is a real-time anti-hijacking security framework designed specifically to protect unmanned aerial vehicles (UAVs) from unauthorized control takeover
 
 Modern drones rely on wireless communication between the ground control station and the flight controller for navigation and mission execution. While communication channels may use encryption, the drone’s control layer remains vulnerable to command injection, replay attacks, spoofed control sources, and abnormal command bursts
