@@ -15,10 +15,11 @@ class DefenseLogic:
 
         else:
             # update safe altitude during normal operation
-            self.last_safe_altitude = data.get("altitude", 0)
+            if data.get("trust_score", 1.0) > 0.8:
+                self.last_safe_altitude = data.get("altitude", 0)
 
         # DEFENSE LOGIC
-        if data.get("flagged") and data.get("trust_score", 1.0) >= 0.5:
+        if data.get("flagged") and data.get("trust_score", 1.0) >= 0.8:
             print("[DEFENSE] Taking corrective action")
 
             if "altitude" in data and data["altitude"] > 100:
