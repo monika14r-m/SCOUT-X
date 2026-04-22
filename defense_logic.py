@@ -1,9 +1,26 @@
 class DefenseLogic:
+    def __init__(self):
+        self.last_safe_altitude = None
+
     def apply_defense(self, data):
-        if data.get("flagged"):
+
+        # TRUST-BASED CONTROL
+        if data.get("trust_score", 1.0) < 0.8:
+            data["action"] = "TRUST_LOW_MODE"
+
+            if self.last_safe_altitude is not None:
+                data["altitude"] = self.last_safe_altitude
+            else:
+                self.last_safe_altitude = data.get("altitude", 0)
+
+        else:
+            # update safe altitude during normal operation
+            self.last_safe_altitude = data.get("altitude", 0)
+
+        # DEFENSE LOGIC
+        if data.get("flagged") and data.get("trust_score", 1.0) >= 0.5:
             print("[DEFENSE] Taking corrective action")
 
-            # Clamp altitude if spoofed
             if "altitude" in data and data["altitude"] > 100:
                 data["altitude"] = 100
 
