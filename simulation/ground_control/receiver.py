@@ -1,3 +1,6 @@
+from simulation.analysis.attack_analyzer import AttackAnalyzer
+analyzer = AttackAnalyzer()
+
 import socket
 import json
 
@@ -14,6 +17,11 @@ while True:
 
     try:
         packet = json.loads(data.decode())
+
+        pattern = analyzer.analyze(packet)
+
+        print(f"Pattern: {pattern['pattern']}")
+        print(f"Severity: {pattern['severity']}")
 
         print("=" * 50)
         print(f"[RECEIVED] SEQ: {packet.get('seq')}")
