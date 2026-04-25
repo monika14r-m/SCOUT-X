@@ -1,5 +1,7 @@
+from simulation.logging.attack_logger import AttackLogger
 from simulation.analysis.attack_analyzer import AttackAnalyzer
 analyzer = AttackAnalyzer()
+logger = AttackLogger()
 
 import socket
 import json
@@ -19,6 +21,7 @@ while True:
         packet = json.loads(data.decode())
 
         pattern = analyzer.analyze(packet)
+        logger.log(packet, pattern)
 
         print(f"Pattern: {pattern['pattern']}")
         print(f"Severity: {pattern['severity']}")
