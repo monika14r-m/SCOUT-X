@@ -23,3 +23,7 @@ class AttackLogger:
 
         with open(self.file_path, "a") as f:
             f.write(json.dumps(log_entry) + "\n")
+
+        if pattern.get("severity") == "HIGH":
+            with open("high_severity_logs.json", "a") as f:
+                f.write(json.dumps(log_entry) + "\n")
