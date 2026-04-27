@@ -1,7 +1,9 @@
+from simulation.security.response_engine import ResponseEngine
 from simulation.logging.attack_logger import AttackLogger
 from simulation.analysis.attack_analyzer import AttackAnalyzer
 analyzer = AttackAnalyzer()
 logger = AttackLogger()
+engine = ResponseEngine()
 
 import socket
 import json
@@ -21,7 +23,13 @@ while True:
         packet = json.loads(data.decode())
 
         pattern = analyzer.analyze(packet)
-        logger.log(packet, pattern)
+
+        decision = engine.decide(packet)
+
+        logger.log(packet, pattern, decision)
+
+        decision = engine.decide(packet)
+        print(f"Response Decision: {decision}")
 
         print(f"Pattern: {pattern['pattern']}")
         print(f"Severity: {pattern['severity']}")
