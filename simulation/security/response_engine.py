@@ -4,19 +4,19 @@ class ResponseEngine:
         pattern = data.get("pattern")
         severity = data.get("severity")
 
-        # HARD DEFENSE
-        if trust < 0.3:
-            return "ISOLATE_DRONE"
-
-        # PERSISTENT ATTACK = ESCALATE
+        # 1. HIGHEST PRIORITY: CRITICAL ATTACK
         if pattern == "PERSISTENT_ATTACK" and severity == "HIGH":
             return "FORCE_LAND"
 
-        # INTERMITTENT ATTACK
+        # 2. LOW TRUST
+        if trust < 0.3:
+            return "ISOLATE_DRONE"
+
+        # 3. INTERMITTENT ATTACK
         if pattern == "INTERMITTENT_ATTACK":
             return "LIMIT_MOVEMENT"
 
-        # MINOR ISSUES
+        # 4. MINOR
         if severity == "LOW":
             return "MONITOR"
 

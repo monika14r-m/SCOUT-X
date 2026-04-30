@@ -24,11 +24,12 @@ while True:
 
         pattern = analyzer.analyze(packet)
 
-        decision = engine.decide(packet)
+        decision = engine.decide({**packet, **pattern})
 
         logger.log(packet, pattern, decision)
 
-        decision = engine.decide(packet)
+        decision = engine.decide({**packet, **pattern})
+        packet["response"] = decision
         print(f"Response Decision: {decision}")
 
         print(f"Pattern: {pattern['pattern']}")
