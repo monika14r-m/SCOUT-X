@@ -8,8 +8,14 @@ class SecurityMiddleware:
         """
         Main entry point for all telemetry data
         """
+
+        # STEP 0 — sanitize garbage input
+        data = self.sanitize_data(data)
+
+        # STEP 1 — anomaly detection
         anomaly = self.detect_anomaly(data)
 
+        # STEP 2 — trust update
         if anomaly:
             self.update_trust(flag=True)
             data["flagged"] = True
@@ -18,6 +24,25 @@ class SecurityMiddleware:
             data["flagged"] = False
 
         data["trust_score"] = self.trust_score
+        return data
+
+    def sanitize_data(self, data):
+        """
+        Clamp physically impossible values
+        """
+
+        # Battery cannot be negative or >100
+        if "battery" in data:
+            data["battery"] = max(0, min(100, data["battery"]))
+
+        # Speed cannot be negative
+        if "speed" in data:
+            data["speed"] = max(0, data["speed"])
+
+        # Altitude cannot be negative
+        if "altitude" in data:
+            data["altitude"] = max(0, data["altitude"])
+
         return data
 
     def detect_anomaly(self, data):
