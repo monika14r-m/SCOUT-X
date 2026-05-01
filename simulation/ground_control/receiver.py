@@ -1,12 +1,13 @@
 from simulation.security.response_engine import ResponseEngine
 from simulation.logging.attack_logger import AttackLogger
 from simulation.analysis.attack_analyzer import AttackAnalyzer
-analyzer = AttackAnalyzer()
-logger = AttackLogger()
-engine = ResponseEngine()
 
 import socket
 import json
+
+analyzer = AttackAnalyzer()
+logger = AttackLogger()
+engine = ResponseEngine()
 
 HOST = "127.0.0.1"
 PORT = 9999
@@ -22,37 +23,33 @@ while True:
     try:
         packet = json.loads(data.decode())
 
+        # STEP 1 — Analyze attack pattern
         pattern = analyzer.analyze(packet)
 
-        decision = engine.decide({**packet, **pattern})
+        # STEP 2 — Merge pattern into packet (CRITICAL)
+        enriched_packet = {**packet, **pattern}
 
-        logger.log(packet, pattern, decision)
+        # STEP 3 — Decide response ONCE
+        decision = engine.decide(enriched_packet)
 
-        decision = engine.decide({**packet, **pattern})
-        packet["response"] = decision
-        print(f"Response Decision: {decision}")
+        # STEP 4 — Attach response
+        enriched_packet["response"] = decision
 
-        print(f"Pattern: {pattern['pattern']}")
-        print(f"Severity: {pattern['severity']}")
+        # STEP 5 — Log everything
+        logger.log(enriched_packet, pattern, decision)
 
-        print("=" * 50)
-        print(f"[RECEIVED] SEQ: {packet.get('seq')}")
+        # STEP 6 — Clean monitoring output
+        print(
+            f"[SEQ {packet.get('seq')}] | "
+            f"{pattern['pattern']} ({pattern['severity']}) | "
+            f"Trust: {packet.get('trust_score'):.2f} | "
+            f"Response: {decision}"
+        )
 
-        print(f"GPS: {packet.get('gps')}")
-        print(f"Altitude: {packet.get('altitude')}")
-        print(f"Speed: {packet.get('speed')}")
-        print(f"Battery: {packet.get('battery')}")
-
-        print(f"Trust Score: {packet.get('trust_score')}")
-        print(f"Flagged: {packet.get('flagged')}")
-        print(f"Action: {packet.get('action', 'NONE')}")
-
+        # Optional anomaly detail
         validation = packet.get("validation", {})
-        print(f"Validation Score: {validation.get('score')}")
-        print(f"Flags: {validation.get('flags')}")
-
         if validation.get("is_anomalous"):
-            print(">>> ANOMALY DETECTED <<<")
+            print(f"  ⚠ Flags: {validation.get('flags')}")
 
     except Exception as e:
         print("[ERROR] Failed to parse packet:", e)
