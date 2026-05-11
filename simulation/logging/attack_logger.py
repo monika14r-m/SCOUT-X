@@ -21,7 +21,8 @@ class AttackLogger:
             "pattern": pattern.get("pattern"),
             "severity": pattern.get("severity"),
 
-            "response": decision,  # ← THIS is what you were missing
+            "response": decision,  
+            "enforced": packet.get("enforced"),
 
             "flags": packet.get("validation", {}).get("flags", [])
         }
