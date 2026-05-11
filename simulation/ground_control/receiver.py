@@ -1,6 +1,9 @@
 from simulation.security.response_engine import ResponseEngine
 from simulation.logging.attack_logger import AttackLogger
 from simulation.analysis.attack_analyzer import AttackAnalyzer
+from simulation.security.enforcer import ResponseEnforcer
+
+enforcer = ResponseEnforcer()
 
 import socket
 import json
@@ -34,6 +37,7 @@ while True:
 
         # STEP 4 — Attach response
         enriched_packet["response"] = decision
+        packet = enforcer.enforce(packet)
 
         # STEP 5 — Log everything
         logger.log(enriched_packet, pattern, decision)
