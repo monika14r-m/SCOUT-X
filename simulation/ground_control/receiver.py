@@ -2,6 +2,7 @@ from simulation.security.response_engine import ResponseEngine
 from simulation.logging.attack_logger import AttackLogger
 from simulation.analysis.attack_analyzer import AttackAnalyzer
 from simulation.security.enforcer import ResponseEnforcer
+from simulation.analysis.threat_stats import ThreatStats
 
 import socket
 import json
@@ -10,6 +11,7 @@ analyzer = AttackAnalyzer()
 logger = AttackLogger()
 engine = ResponseEngine()
 enforcer = ResponseEnforcer()
+stats = ThreatStats()
 
 HOST = "127.0.0.1"
 PORT = 9999
@@ -25,25 +27,27 @@ while True:
     try:
         packet = json.loads(data.decode())
 
-        # STEP 1 — Analyze attack pattern
+        # Analyze attack pattern
         pattern = analyzer.analyze(packet)
 
-        # STEP 2 — Merge analysis into packet
+        # Merge packet + pattern
         enriched_packet = {**packet, **pattern}
 
-        # STEP 3 — Decide response
+        # Decide response
         decision = engine.decide(enriched_packet)
-
-        # STEP 4 — Attach response
         enriched_packet["response"] = decision
 
-        # STEP 5 — ENFORCE RESPONSE
+        # Enforce action
         enriched_packet = enforcer.enforce(enriched_packet)
 
-        # STEP 6 — Log everything
+        # Update live stats
+        stats.update(enriched_packet)
+        stats.display()
+
+        # Log event
         logger.log(enriched_packet, pattern, decision)
 
-        # STEP 7 — Monitoring output
+        # Console output
         print(
             f"[SEQ {enriched_packet.get('seq')}] | "
             f"{pattern['pattern']} ({pattern['severity']}) | "
@@ -52,7 +56,6 @@ while True:
         )
 
         validation = enriched_packet.get("validation", {})
-
         if validation.get("is_anomalous"):
             print(f"  ⚠ Flags: {validation.get('flags')}")
 
