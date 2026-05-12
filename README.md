@@ -17,8 +17,7 @@ It generates live telemetry data such as GPS coordinates, altitude, and battery 
 The simulation helps validate data flow and system responses before deploying on an actual drone.
 
 ### How to Run
-1. Run ground_control.py  
-2. Run drone_sim.py  
+  2. Run drone_sim.py 
 
 ### Sample Output
 {"gps": {"lat": 12.9717, "lon": 77.5947}, "altitude": 10, "battery": 99.5}
