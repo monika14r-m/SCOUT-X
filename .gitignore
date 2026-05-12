@@ -5,3 +5,5 @@ test.txt
 node_modules/
 __pycache__/
 *.pyc
+attack_log.json
+high_severity_logs.json
