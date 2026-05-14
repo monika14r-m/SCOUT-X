@@ -2,6 +2,7 @@ from simulation.validators.consistency_validator import validate_consistency
 from defense_logic import DefenseLogic
 from security_middleware import SecurityMiddleware
 from simulation.telemetry.telemetry_engine import TelemetryEngine
+from simulation.logging.attack_logger import AttackLogger
 import socket
 import json
 import time
@@ -9,6 +10,7 @@ import time
 engine = TelemetryEngine()
 security = SecurityMiddleware()
 defense = DefenseLogic()
+logger = AttackLogger()
 
 HOST = "127.0.0.1"
 PORT = 9999
@@ -45,6 +47,15 @@ while True:
 
     # Step 4: send to ground control
     sock.sendto(json.dumps(data).encode(), (HOST, PORT))
+
+    pattern = {
+    "pattern": "PERSISTENT_ATTACK" if data.get("flagged") else "NORMAL",
+    "severity": "HIGH" if data.get("flagged") else "LOW"
+    }
+
+    decision = data.get("enforced", "NONE")
+
+    logger.log(data, pattern, decision)
     
     
     print("[SIMULATION]", data)
