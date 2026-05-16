@@ -1,5 +1,6 @@
 from simulation.validators.consistency_validator import validate_consistency
 from simulation.validators.motion_validator import validate_motion
+from simulation.analysis.attack_classifier import classify_attack
 from defense_logic import DefenseLogic
 from security_middleware import SecurityMiddleware
 from simulation.telemetry.telemetry_engine import TelemetryEngine
@@ -27,14 +28,14 @@ while True:
     # Step 2: inject spoof attack
     if 5 < data["seq"] < 15:
         data["altitude"] += 500
-        data["gps"]["lat"] += 1.5   # force impossible GPS jump
+        data["gps"]["lat"] += 1.5
         data["attack"] = "ALTITUDE_SPOOF"
 
     # Step 3: security validation
     data = security.validate_telemetry(data)
     data = defense.apply_defense(data)
 
-    # Step 4: validators
+    # Step 4: run validators
     consistency_result = validate_consistency(prev_state, data)
     motion_result = validate_motion(prev_state, data)
 
@@ -43,22 +44,25 @@ while True:
         "motion": motion_result
     }
 
-    # Step 5: send packet
+    # Step 5: classify attack
+    data["classified_attack"] = classify_attack(data)
+
+    # Step 6: send packet
     sock.sendto(json.dumps(data).encode(), (HOST, PORT))
 
-    # Step 6: logging
+    # Step 7: logging
     pattern = {
-        "pattern": "PERSISTENT_ATTACK" if data.get("flagged") else "NORMAL",
+        "pattern": data["classified_attack"],
         "severity": "HIGH" if data.get("flagged") else "LOW"
     }
 
     decision = data.get("enforced", "NONE")
     logger.log(data, pattern, decision)
 
-    # Step 7: print output
+    # Step 8: print output
     print("[SIMULATION]", data)
 
-    # Step 8: update previous state
+    # Step 9: update previous state
     prev_state = data.copy()
 
     time.sleep(1)
