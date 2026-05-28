@@ -1,10 +1,10 @@
 # Basic Flight Validation
 
 ## Goal
-Verify stable drone movement and telemetry consistency.
+Verify stable drone movement and telemetry consistency inside Gazebo simulation.
 
 ## Tests Performed
-- takeoff
+- takeoff validation
 - hover stability
 - directional movement
 - sensor topic verification
@@ -13,7 +13,7 @@ Verify stable drone movement and telemetry consistency.
 - IMU
 - GPS
 - LiDAR
-- Camera
+- Camera feed
 
 ## Result
-Simulation executed successfully with valid telemetry output.
+Simulation executed successfully with stable telemetry output.
