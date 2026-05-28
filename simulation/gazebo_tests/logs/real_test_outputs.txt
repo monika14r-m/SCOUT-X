@@ -1,0 +1,3 @@
+rostopic echo /gps/fix
+rostopic list
+rostopic hz /imu
