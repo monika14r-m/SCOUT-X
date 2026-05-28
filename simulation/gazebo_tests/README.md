@@ -1,24 +1,21 @@
-# Gazebo Simulation Tests
+## Gazebo Simulation Testing
 
-## Objective
-Validate drone behavior and sensor telemetry in simulated environments using Gazebo.
+The Gazebo simulation environment is used to validate drone behavior, telemetry consistency, and sensor outputs before real-world deployment.
 
-## Components Tested
-- Drone movement
-- GPS telemetry
-- IMU data
-- LiDAR sensor topics
-- Camera feed output
+### Current Validation Areas
+- Basic drone movement
+- GPS telemetry verification
+- IMU sensor validation
+- LiDAR topic monitoring
+- Camera feed testing
 
-## Test Environment
-- ROS + Gazebo
-- Simulated drone world
-- Basic telemetry pipeline
+### Simulation Assets
+- Flight validation scenarios
+- GPS signal validation
+- Execution logs
+- Environment configuration notes
 
-## Current Status
-Initial simulation validation completed successfully.
-
-## Future Scope
+### Future Scope
 - GPS spoofing simulation
-- Sensor anomaly testing
-- Autonomous response validation
+- Sensor anomaly detection
+- Autonomous defensive response testing
