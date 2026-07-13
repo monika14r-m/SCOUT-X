@@ -1,12 +1,7 @@
 # SCOUT-X: Secure Command and Operations for UAV Telemetry — Exfiltration Defense
 
-SCOUT-X is a real-time anti-hijacking security framework designed specifically to protect unmanned aerial vehicles (UAVs) from unauthorized control takeover
+Current UAV systems operating in contested environments lack onboard autonomous cyber-resilience. Upon detecting adversarial interference — including GPS spoofing, command injection, or signal interception — existing drones have no standardized mechanism to classify the threat severity, protect mission-critical data, and execute a tiered autonomous response independent of ground control. This creates a critical vulnerability: once communication is compromised, the drone is effectively blind, controllable by the adversary, or irretrievably lost. SCOUT-X proposes an onboard Cyber Incident Response Engine (CIRE) that detects, classifies, and responds to live cyber threats autonomously — without relying on ground station intervention.
 
-Modern drones rely on wireless communication between the ground control station and the flight controller for navigation and mission execution. While communication channels may use encryption, the drone’s control layer remains vulnerable to command injection, replay attacks, spoofed control sources, and abnormal command bursts
-
-SCOUT-X introduces a control-layer security engine that intercepts and validates all incoming flight commands before execution. The system enforces authenticated command integrity, analyzes behavioral flight patterns in real time, and activates automatic mitigation mechanisms such as safe-hover or return-to-home when hijacking attempts are detected
-
-By shifting protection from network-level monitoring to runtime control enforcement, SCOUT-X enhances drone resilience against remote takeover attacks
 ___________________________________________________________________________________________________________________________________________________________________
 
 ## Drone Simulation
